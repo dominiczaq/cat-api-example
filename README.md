@@ -1,3 +1,22 @@
+# TODO
+
+Add gallery component to existing application.
+
+Definition of done:
+
+1. New component is available under `/gallery` url.
+2. Component fetches images from The Cat Api https://docs.thecatapi.com/. Use `/images/search` endpoint.
+3. Component displays images in batches of 10 with infinite scroll (autoload images when the user reaches the bottom of the page).
+4. Component has basic styling :)
+
+Bonus points 🎊! Implement `Autoscroll` button for lazy users - when clicked the page should automatically scroll to the bottom after 10 seconds.
+
+Please make pull request to the original repository with your changes.
+
+Good luck and do not hesitate to ask in case of any questions!
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
