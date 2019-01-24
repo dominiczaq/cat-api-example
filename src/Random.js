@@ -1,13 +1,11 @@
 import React from "react";
 
-const STATUS_FETCHING = "fetching";
-const STATUS_FETCHED = "fetched";
-const STATUS_LOADED = "loaded";
+import { STATUS } from './constants';
 
 export default class extends React.Component {
   state = {
     image: null,
-    loadingState: STATUS_FETCHING
+    loadingState: STATUS.FETCHING
   };
 
   componentDidMount() {
@@ -16,7 +14,7 @@ export default class extends React.Component {
 
   fetchRandomCat = () => {
     this.setState({
-      loadingState: STATUS_FETCHING
+      loadingState: STATUS.FETCHING
     });
     fetch("https://api.thecatapi.com/v1/images/search", {
       headers: {
@@ -27,7 +25,7 @@ export default class extends React.Component {
       .then(data => data.json())
       .then(data => {
         const { url } = data[0];
-        this.setState({ image: url, loadingState: STATUS_FETCHED });
+        this.setState({ image: url, loadingState: STATUS.FETCHED });
       });
   };
 
@@ -38,19 +36,19 @@ export default class extends React.Component {
           <button onClick={this.fetchRandomCat}>Get random cat!</button>
         </div>
         <div>
-          {this.state.loadingState !== STATUS_LOADED && (
+          {this.state.loadingState !== STATUS.LOADED && (
             <div className="loader">Loading...</div>
           )}
-          {this.state.loadingState !== STATUS_FETCHING && this.state.image ? (
+          {this.state.loadingState !== STATUS.FETCHING && this.state.image ? (
             <img
               onLoad={() => {
                 this.setState({
-                  loadingState: STATUS_LOADED
+                  loadingState: STATUS.LOADED
                 });
               }}
               style={{
                 display:
-                  this.state.loadingState === STATUS_LOADED ? "inline" : "none"
+                  this.state.loadingState === STATUS.LOADED ? "inline" : "none"
               }}
               key={this.state.image}
               src={this.state.image}

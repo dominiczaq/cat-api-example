@@ -75,3 +75,16 @@ nav a:focus {
     transform: rotate(360deg);
   }
 }
+
+.photos {
+  line-height: 0;
+  -webkit-column-count: 3;
+  -webkit-column-gap: 0px;
+  column-count: 3;
+  column-gap: 0px;  
+}
+
+.photos img {
+  width: 100% ;
+  height: auto;
+}
