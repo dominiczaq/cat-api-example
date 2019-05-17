@@ -8,7 +8,10 @@ export default function Content() {
     <div className="content">
       <Route path="/" exact render={() => <Redirect to="/random" />} />
       <Route path="/random/" component={Random} />
-      <Route path="/gallery/" component={Gallery} />
+      <Route 
+        path="/gallery/"
+        render={(props) => <Gallery {...props} number={10} />} 
+      />
     </div>
   );
 }
