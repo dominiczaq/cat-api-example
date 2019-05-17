@@ -8,7 +8,7 @@ export default class extends React.Component {
   loaderElem = React.createRef();
 
   componentDidMount() {
-    const observer = new IntersectionObserver((entries) => {
+    new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 this.fetchBatchCats();
