@@ -33,14 +33,22 @@ export default class extends React.Component {
                 this.setState({catsArray: this.state.catsArray.concat(data)})
             });
     };
+    scrollDown = () => {
+        document.getElementById("end").scrollIntoView({
+            behavior: 'smooth',
+            block: 'end'
+        })
+    }
 
     render() {
         return (
             <div className="gallery">
+                <button className="buttonForLazyUsers" onClick={setTimeout(this.scrollDown,10000)}>GIVE ME THE CATS! (in 10 seconds)</button>
                 <div ref={this.galleryScroll}   className="gallery__container">
                     {this.state.catsArray.map(cat =>
                         <Cat key={cat.id + Math.random().toString(36).substring(7)} url={cat.url}/>
                     )}
+                    <div id="end"></div>
                 </div>
             </div>
         );
