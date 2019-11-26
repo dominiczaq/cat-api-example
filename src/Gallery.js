@@ -1,5 +1,6 @@
 import React from "react";
 import Cat from "./Cat";
+const debounce = require('./util.js').debounce;
 
 export default class extends React.Component {
     state = {
@@ -7,18 +8,20 @@ export default class extends React.Component {
         catsArray: []
     };
 
+    galleryScroll = React.createRef();
+
     componentDidMount() {
         this.fetchMeTheCats();
+        document.querySelector(".gallery__container").addEventListener('scroll', debounce(this.trackScrolling));
     }
 
-    populateTheCatArray = (element, index, array) => {
-        this.state.catsArray.push(<Cat key={element.id} url={element.url}/>)
-    }
+    trackScrolling = () => {
+        if (this.galleryScroll.current.scrollTop + this.galleryScroll.current.clientHeight >= this.galleryScroll.current.scrollHeight) {
+            this.fetchMeTheCats();
+        }
+    };
 
     fetchMeTheCats = () => {
-        this.setState({
-            loadingState: STATUS_FETCHING
-        });
         fetch("https://api.thecatapi.com/v1/images/search?limit=" + this.state.batchSize, {
             headers: {
                 "Content-Type": "application/json",
@@ -27,16 +30,17 @@ export default class extends React.Component {
         })
             .then(data => data.json())
             .then(data => {
-                data.forEach(this.populateTheCatArray);
+                this.setState({catsArray: this.state.catsArray.concat(data)})
             });
     };
 
     render() {
         return (
             <div className="gallery">
-
-                <div className="gallery__container">
-                    {this.state.catsArray.map(cat => (cat))}
+                <div ref={this.galleryScroll}   className="gallery__container">
+                    {this.state.catsArray.map(cat =>
+                        <Cat key={cat.id + Math.random().toString(36).substring(7)} url={cat.url}/>
+                    )}
                 </div>
             </div>
         );
