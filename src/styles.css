@@ -7,7 +7,7 @@ body {
 nav ul {
   list-style: none;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   background-color: #ffc859;
   margin: 0;
 }
@@ -32,6 +32,50 @@ nav a:focus {
   margin-top: 20px;
   max-width: 400px;
   height: auto;
+}
+
+.gallery__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gallery__list-item {
+  margin: 10px 0;
+}
+
+.gallery__list-item img {
+  max-width: 400px;
+  height: auto;
+}
+
+.gallery__scroll-button {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  padding: 20px 25px;
+  background-color: #59c8ff;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.gallery__scroll-button:hover {
+  background-color: #10c8ff;
+}
+
+.gallery__scroll-button:disabled {
+  background-color: #aaaaaa;
+  cursor: wait;
+}
+
+.error {
+  font-size: 16px;
+  color: red;
+  text-align: center;
 }
 
 .loader,

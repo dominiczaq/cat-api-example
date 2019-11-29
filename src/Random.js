@@ -1,4 +1,5 @@
 import React from "react";
+import { CAT_API_KEY } from "./config";
 
 const STATUS_FETCHING = "fetching";
 const STATUS_FETCHED = "fetched";
@@ -21,7 +22,7 @@ export default class extends React.Component {
     fetch("https://api.thecatapi.com/v1/images/search", {
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": "4bebae0d-0ec4-4787-8e77-8602741525af"
+        "x-api-key": CAT_API_KEY
       }
     })
       .then(data => data.json())
