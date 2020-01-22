@@ -33,6 +33,42 @@ nav a:focus {
   max-width: 400px;
   height: auto;
 }
+.gallery p {
+text-align: center;
+margin-top: 2px;
+font-weight: bold;
+font-size: large;
+}
+.gallery button {
+  color: #fff !important;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 20px;
+  border-radius: 50px;
+  display: block;
+  border: none;
+  transition: all 0.4s ease 0s;
+  margin-left: auto;
+  margin-right: auto;
+}
+.autoscroll {
+    margin-left: auto;
+}
+
+.btn-red{
+  background-color: red;
+}
+.btn-red:hover{
+  background-color: rgba(246, 71, 71, 1);
+}
+
+.btn-green{
+  background-color: green;
+}
+.btn-green:hover{
+  background-color: rgba(77, 175, 124, 1)
+}
+
 
 .loader,
 .loader:after {
