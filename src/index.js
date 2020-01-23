@@ -14,6 +14,9 @@ function App() {
             <li>
               <Link to="/random">Random</Link>
             </li>
+            <li>
+              <Link to="/gallery">Gallery</Link>
+            </li>
           </ul>
         </nav>
         <Content />
