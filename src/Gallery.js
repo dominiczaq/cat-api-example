@@ -36,7 +36,7 @@ export default class Gallery extends React.Component {
     this.setState({
       loadingState: STATUS_FETCHING
     });
-    fetch(`https://api.thecatapi.com/v1/images/search?limit=${limit}&order=ASC&page=${page}`, {
+    fetch(`https://api.thecatapi.com/v1/images/search?limit=${limit}&page=${page}`, {
     headers: {
       "Content-Type": "application/json",
       "x-api-key": "4bebae0d-0ec4-4787-8e77-8602741525af"
@@ -71,14 +71,14 @@ export default class Gallery extends React.Component {
 
   render() {     
     return (
-      <div className="gallery">
-        <div ref={ el => this.galleryContainer = el }>
+      <div className="gallery-container">
+        <div className="gallery" ref={ el => this.galleryContainer = el }>
         {this.state.loadingState !== STATUS_LOADED && (
             <div className="loader" ref={ el => this.loader = el }>Loading...</div>
         )}
         </div>
         {(window.scrollY + window.innerHeight) < window.outerHeight && (
-            <button onClick={() => this.fetchRandomCat()}>Show more images</button>
+            <button className="load-more-button" onClick={() => this.fetchRandomCat()}>Show more images</button>
         )}
       </div>
     );
