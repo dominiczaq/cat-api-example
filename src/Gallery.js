@@ -8,7 +8,8 @@ export default class Gallery extends React.Component {
     state = {
         loadingState: STATUS_FETCHING,
         page: 0,
-        limit: 10
+        limit: 10,
+        limitImagesOnPage: 100
     };
 
     images = [];
@@ -18,6 +19,9 @@ export default class Gallery extends React.Component {
     }
 
     fetchRandomCat = () => {
+        if (this.images.length > (this.state.limitImagesOnPage - this.state.limit) ) {
+            return;
+        }
         const { limit, page } = this.state;
         this.setState({
         loadingState: STATUS_FETCHING
