@@ -8,6 +8,8 @@ export default class Gallery extends React.Component {
     state = {
         images: null,
         loadingState: STATUS_FETCHING,
+        page: 0,
+        limit: 10
     };
 
     componentDidMount() {
@@ -15,10 +17,11 @@ export default class Gallery extends React.Component {
     }
 
     fetchRandomCat = () => {
+        const { limit, page } = this.state;
         this.setState({
         loadingState: STATUS_FETCHING
         });
-        fetch(`https://api.thecatapi.com/v1/images/search?limit=10&order=ASC&page=0`, {
+        fetch(`https://api.thecatapi.com/v1/images/search?limit=${limit}&order=ASC&page=${page}`, {
         headers: {
             "Content-Type": "application/json",
             "x-api-key": "4bebae0d-0ec4-4787-8e77-8602741525af"
@@ -35,6 +38,7 @@ export default class Gallery extends React.Component {
             this.setState({
                 images: imagesUrl,
                 loadingState: STATUS_LOADED,
+                page: this.state.page + 1
             });
         });
     };
@@ -69,6 +73,7 @@ export default class Gallery extends React.Component {
                     images
                 ) : null}
                 </div>
+                <button onClick={() => this.fetchRandomCat()}>Show more images</button>
             </div>
         )
     }
