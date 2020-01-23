@@ -37,15 +37,24 @@ export default class Gallery extends React.Component {
 
   scrollToBottom = () => {
     const startScrolling = (images = this.images, limitImages = this.state.limitImagesOnPage) => {
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-      });
-      console.log('interval ', images, limitImages);
-      if (this.images >= this.state.limitImagesOnPage) {
-        console.log('stop');
-        clearInterval(interval);
+      if (!this.state.isScrollbarVisible) {
+        this.fetchRandomCat();
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+      } else {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+        console.log('interval ', images, limitImages);
+        if (this.images >= this.state.limitImagesOnPage) {
+          console.log('stop');
+          clearInterval(interval);
+        }
       }
+      
     }
     const interval = setInterval(startScrolling, 1000);
   }
