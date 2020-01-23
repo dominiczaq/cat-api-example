@@ -6,11 +6,12 @@ const STATUS_LOADED = "loaded";
 
 export default class Gallery extends React.Component {
     state = {
-        images: null,
         loadingState: STATUS_FETCHING,
         page: 0,
         limit: 10
     };
+
+    images = [];
 
     componentDidMount() {
         this.fetchRandomCat();
@@ -33,45 +34,34 @@ export default class Gallery extends React.Component {
             for (let i=0; i < data.length; i++) {
                 const { url, id } = data[i];
                 imagesUrl.push([url, id]);
+                this.images.push([url, id]);
             }
-            console.log(imagesUrl)
+            
+            for (let i=0; i < imagesUrl.length; i++) {
+                const imgDiv = document.createElement("div");
+                const img = document.createElement("img");
+                imgDiv.setAttribute("key", `${imagesUrl[i][1]}`);
+                imgDiv.setAttribute("class", "image-container");
+                img.setAttribute("class", "image");
+                img.setAttribute("src", `${imagesUrl[i][0]}`);
+                img.setAttribute("alt", `cat-${imagesUrl[i][1]}`);
+                imgDiv.appendChild(img);
+                this.galleryContainer.insertBefore(imgDiv, this.loader);
+            }
             this.setState({
-                images: imagesUrl,
-                loadingState: STATUS_LOADED,
-                page: this.state.page + 1
+            loadingState: STATUS_LOADED,
+            page: this.state.page + 1
             });
         });
     };
 
-    render() {
-        console.log(this.state.images)
-        let images = [];
-        if (this.state.images) {
-            images = this.state.images.map( image => {
-                return (
-                    <img
-                        style={{
-                            width: 'auto', height: 200,
-                            display:
-                            this.state.loadingState === STATUS_LOADED ? "inline" : "none"
-                        }}
-                        key={image[1]}
-                        src={image[0]}
-                        alt="Cat"
-                    />
-                );
-            });
-        }
-        
+    render() {     
         return (
             <div className="gallery">
-                <div>
+                <div ref={ el => this.galleryContainer = el }>
                 {this.state.loadingState !== STATUS_LOADED && (
-                    <div className="loader">Loading...</div>
+                    <div className="loader" ref={ el => this.loader = el }>Loading...</div>
                 )}
-                {this.state.loadingState !== STATUS_FETCHING && this.state.images ? (
-                    images
-                ) : null}
                 </div>
                 <button onClick={() => this.fetchRandomCat()}>Show more images</button>
             </div>

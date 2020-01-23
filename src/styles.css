@@ -75,3 +75,17 @@ nav a:focus {
     transform: rotate(360deg);
   }
 }
+
+
+/* Gallery styles */
+
+.image-container {
+  width: auto; 
+  height: 200px;
+  display: inline-block;
+}
+
+.image {
+  width: auto; 
+  height: 100%;
+}
