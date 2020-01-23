@@ -16,6 +16,18 @@ export default class Gallery extends React.Component {
 
     componentDidMount() {
         this.fetchRandomCat();
+        window.addEventListener('scroll', this.handleScroll);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("scroll", this.handleScroll); 
+    }
+
+    handleScroll = () => {
+        // console.log(window.scrollY + window.innerHeight , window.outerHeight)
+        if ( (window.scrollY + window.innerHeight) === document.body.offsetHeight ) {
+            this.fetchRandomCat();
+        }
     }
 
     fetchRandomCat = () => {
@@ -67,8 +79,10 @@ export default class Gallery extends React.Component {
                     <div className="loader" ref={ el => this.loader = el }>Loading...</div>
                 )}
                 </div>
-                <button onClick={() => this.fetchRandomCat()}>Show more images</button>
+                {(window.scrollY + window.innerHeight) < window.outerHeight && (
+                    <button onClick={() => this.fetchRandomCat()}>Show more images</button>
+                )}
             </div>
-        )
+        );
     }
 }
