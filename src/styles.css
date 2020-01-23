@@ -94,7 +94,12 @@ nav a:focus {
   box-sizing: border-box;
 }
 
-.load-more-button {
+.scroll-to-bottom-button-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.load-more-button, .scroll-to-bottom-button {
   display: block;
   margin: 30px auto;
   background-color: #fdc763;
@@ -103,16 +108,21 @@ nav a:focus {
   box-shadow: 3px 3px 3px gray;
 }
 
-.load-more-button:hover {
+.scroll-to-bottom-button {
+  margin: 30px 0;
+  margin-left: auto;
+}
+
+.load-more-button:hover, .scroll-to-bottom-button:hover {
   background-color: #ffaf1c;
 }
 
-.load-more-button:active {
+.load-more-button:active, .scroll-to-bottom-button:active {
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 1px gray;
 }
 
-.load-more-button:Focus {
+.load-more-button:focus, .scroll-to-bottom-button:focus {
   outline: none;
   border: 2px solid #ffaf1c;
 }

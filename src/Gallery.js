@@ -27,11 +27,27 @@ export default class Gallery extends React.Component {
     if ( (window.scrollY + window.innerHeight) === document.body.offsetHeight ) {
       if (this.state.loadingState !== STATUS_FETCHING) {
         this.fetchRandomCat();
+        console.log('bottom')
       } 
     }
     if (!this.state.isScrollbarVisible && window.pageYOffset > 0) {
       this.setState({isScrollbarVisible: true});
     }
+  }
+
+  scrollToBottom = () => {
+    const startScrolling = (images = this.images, limitImages = this.state.limitImagesOnPage) => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+      console.log('interval ', images, limitImages);
+      if (this.images >= this.state.limitImagesOnPage) {
+        console.log('stop');
+        clearInterval(interval);
+      }
+    }
+    const interval = setInterval(startScrolling, 1000);
   }
 
   fetchRandomCat = () => {
@@ -78,6 +94,9 @@ export default class Gallery extends React.Component {
   render() {
     return (
       <div className="gallery-container">
+        <div className="scroll-to-bottom-button-container">
+          <button className="scroll-to-bottom-button" onClick={() => this.scrollToBottom()}>Automatically Scroll Gallery</button>
+        </div>
         <div className="gallery" ref={ el => this.galleryContainer = el }>
         {this.state.loadingState !== STATUS_LOADED && (
             <div className="loader" ref={ el => this.loader = el }>Loading...</div>
