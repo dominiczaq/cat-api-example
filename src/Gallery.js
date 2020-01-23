@@ -5,7 +5,7 @@ const STATUS_LOADED = "loaded";
 
 export default class Gallery extends React.Component {
   state = {
-      loadingState: STATUS_FETCHING,
+      loadingState: null,
       page: 0,
       limit: 5,
       limitImagesOnPage: 100,
@@ -24,10 +24,10 @@ export default class Gallery extends React.Component {
   }
 
   handleScroll = () => {
-    // console.log("scroll ", window.pageYOffset);
     if ( (window.scrollY + window.innerHeight) === document.body.offsetHeight ) {
-      console.log("bottttttooooooommmmm ", window.scrollY + window.innerHeight, document.body.offsetHeight);
-      this.fetchRandomCat();
+      if (this.state.loadingState !== STATUS_FETCHING) {
+        this.fetchRandomCat();
+      } 
     }
     if (!this.state.isScrollbarVisible && window.pageYOffset > 0) {
       this.setState({isScrollbarVisible: true});
@@ -56,7 +56,7 @@ export default class Gallery extends React.Component {
         imagesUrl.push([url, id]);
         this.images += 1;
       }
-      console.log(this.images)
+      // console.log(this.images)
       for (let i=0; i < imagesUrl.length; i++) {
         const imgDiv = document.createElement("div");
         const img = document.createElement("img");
@@ -76,7 +76,6 @@ export default class Gallery extends React.Component {
   };
 
   render() {
-    // console.log(window.pageYOffset)
     return (
       <div className="gallery-container">
         <div className="gallery" ref={ el => this.galleryContainer = el }>
