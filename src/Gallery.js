@@ -107,7 +107,7 @@ export default class Gallery extends React.Component {
             <div className="loader" ref={ el => this.loader = el }>Loading...</div>
         )}
         </div>
-        {!this.state.isScrollbarVisible ? (
+        {!this.state.isScrollbarVisible && this.state.loadingState === STATUS_LOADED ? (
             <button className="load-more-button" onClick={() => this.fetchRandomCat()}>Show more images</button>
         ) : <div style={{height: 50}}></div> }
       </div>
