@@ -10,7 +10,6 @@ export default class Gallery extends React.Component {
       limit: 10,
       limitImagesOnPage: 100,
       isScrollbarVisible: false,
-      isMobile: false
   };
 
   images = 0;
@@ -18,12 +17,10 @@ export default class Gallery extends React.Component {
   componentDidMount() {
     this.fetchRandomCat();
     window.addEventListener('scroll', this.handleScroll);
-    window.addEventListener('resize', this.screenWidth);
   }
 
   componentWillUnmount() {
     window.removeEventListener("scroll", this.handleScroll); 
-    window.removeEventListener("resize", this.screenWidth); 
   }
 
   handleScroll = () => {
@@ -34,15 +31,6 @@ export default class Gallery extends React.Component {
     }
     if (!this.state.isScrollbarVisible && window.pageYOffset > 0) {
       this.setState({isScrollbarVisible: true});
-    }
-  }
-
-  screenWidth = () => {
-    if (window.innerWidth < 600 && !this.state.isMobile) {
-      this.setState({isMobile: true});
-    }
-    if (window.innerWidth > 600 && this.state.isMobile) {
-      this.setState({isMobile: false});
     }
   }
 
@@ -69,23 +57,11 @@ export default class Gallery extends React.Component {
         this.images += 1;
       }
       // console.log(this.images)
-      this.screenWidth();
       for (let i=0; i < imagesUrl.length; i++) {
-        const imgWidth = imagesUrl[i][2];
-        const imgHeight = imagesUrl[i][3];
-        let ratio = imgWidth / imgHeight;
-        let height = 200;
-        let width = Math.round(200 * ratio);
-        if (this.state.isMobile) {
-          ratio = imgHeight / imgWidth;
-          width = 300;
-          height = Math.round(300 * ratio);
-        };
         const imgDiv = document.createElement("div");
         const img = document.createElement("img");
         imgDiv.setAttribute("key", `${imagesUrl[i][1]}`);
         imgDiv.setAttribute("class", "image-container");
-        imgDiv.setAttribute("style", `width: ${width}px; height: ${height}px`);
         img.setAttribute("class", "image");
         img.setAttribute("src", `${imagesUrl[i][0]}`);
         img.setAttribute("alt", `cat-${imagesUrl[i][1]}`);

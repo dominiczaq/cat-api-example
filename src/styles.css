@@ -85,13 +85,13 @@ nav a:focus {
   height: auto;
   display: block;
   margin: 20px auto;
+  box-shadow: 5px 5px 3px gray;
 }
 
 .image {
   width: 100%; 
   height: auto;
   box-sizing: border-box;
-  border: 6px solid #fdc763;
 }
 
 .load-more-button {
@@ -119,7 +119,7 @@ nav a:focus {
 
 @media screen and (min-width: 600px) {
   .gallery {
-    max-width: 1260px;
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
