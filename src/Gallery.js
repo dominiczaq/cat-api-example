@@ -7,9 +7,10 @@ export default class Gallery extends React.Component {
   state = {
       loadingState: null,
       page: 0,
-      limit: 5,
+      limit: 10,
       limitImagesOnPage: 100,
-      isScrollbarVisible: false
+      isScrollbarVisible: false,
+      isMobile: false
   };
 
   images = 0;
@@ -17,10 +18,12 @@ export default class Gallery extends React.Component {
   componentDidMount() {
     this.fetchRandomCat();
     window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('resize', this.screenWidth);
   }
 
   componentWillUnmount() {
     window.removeEventListener("scroll", this.handleScroll); 
+    window.removeEventListener("resize", this.screenWidth); 
   }
 
   handleScroll = () => {
@@ -34,6 +37,15 @@ export default class Gallery extends React.Component {
     }
   }
 
+  screenWidth = () => {
+    if (window.innerWidth < 600 && !this.state.isMobile) {
+      this.setState({isMobile: true});
+    }
+    if (window.innerWidth > 600 && this.state.isMobile) {
+      this.setState({isMobile: false});
+    }
+  }
+
   fetchRandomCat = () => {
     if (this.images > (this.state.limitImagesOnPage - this.state.limit) ) {
       return;
@@ -42,7 +54,7 @@ export default class Gallery extends React.Component {
     this.setState({
       loadingState: STATUS_FETCHING
     });
-    fetch(`https://api.thecatapi.com/v1/images/search?limit=${limit}&page=${page}`, {
+    fetch(`https://api.thecatapi.com/v1/images/search?limit=${limit}&page=${page}&order=ASC`, {
     headers: {
       "Content-Type": "application/json",
       "x-api-key": "4bebae0d-0ec4-4787-8e77-8602741525af"
@@ -52,16 +64,28 @@ export default class Gallery extends React.Component {
     .then(data => {
       const imagesUrl = [];
       for (let i=0; i < data.length; i++) {
-        const { url, id } = data[i];
-        imagesUrl.push([url, id]);
+        const { url, id, width, height } = data[i];
+        imagesUrl.push([url, id, width, height]);
         this.images += 1;
       }
       // console.log(this.images)
+      this.screenWidth();
       for (let i=0; i < imagesUrl.length; i++) {
+        const imgWidth = imagesUrl[i][2];
+        const imgHeight = imagesUrl[i][3];
+        let ratio = imgWidth / imgHeight;
+        let height = 200;
+        let width = Math.round(200 * ratio);
+        if (this.state.isMobile) {
+          ratio = imgHeight / imgWidth;
+          width = 300;
+          height = Math.round(300 * ratio);
+        };
         const imgDiv = document.createElement("div");
         const img = document.createElement("img");
         imgDiv.setAttribute("key", `${imagesUrl[i][1]}`);
         imgDiv.setAttribute("class", "image-container");
+        imgDiv.setAttribute("style", `width: ${width}px; height: ${height}px`);
         img.setAttribute("class", "image");
         img.setAttribute("src", `${imagesUrl[i][0]}`);
         img.setAttribute("alt", `cat-${imagesUrl[i][1]}`);
