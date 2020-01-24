@@ -10,6 +10,7 @@ export default class Gallery extends React.Component {
       loadLimit: 50,
       displayLimit: 10,
       limitImagesOnPage: 1000,
+      limitImagesOnPageAutoscroll: 110,
       isScrollbarVisible: false,
       isMobile: false,
       isFirstLoad: true
@@ -19,10 +20,21 @@ export default class Gallery extends React.Component {
   loadedImages = 0;
 
   componentDidMount() {
-    this.fetchRandomCat();
+    const loadImagesAtStart = () => {
+      if (window.innerHeight > document.body.offsetHeight) {
+        this.fetchRandomCat();
+      } 
+      if (window.innerHeight < document.body.offsetHeight) {
+        clearInterval(interval);
+        this.setState({
+          isFirstLoad: false,
+          loadLimit: this.state.displayLimit
+        });
+      }
+    }
+    const interval = setInterval(loadImagesAtStart, 500);
     window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', this.screenWidth);
-    this.setState({loadLimit: this.state.displayLimit})
   }
 
   componentWillUnmount() {
@@ -52,8 +64,9 @@ export default class Gallery extends React.Component {
   }
 
   autosSrollToBottom = () => {
-    this.setState({limitImagesOnPage: 110})
+    this.setState({limitImagesOnPage: this.state.limitImagesOnPageAutoscroll})
     const startScrolling = (images = this.loadedImages, limitImages = this.state.limitImagesOnPage) => {
+      // if scrollbar is not visible, then load more images; if is visible, then scroll to bottom, which fires loadind more images
       if (!this.state.isScrollbarVisible) {
         this.fetchRandomCat();
         this.loadImages();
@@ -62,7 +75,7 @@ export default class Gallery extends React.Component {
         top: document.body.offsetHeight - 400,
         behavior: 'smooth'
       });
-      // console.log(images)
+      // clear interval
       if (images >= limitImages) {
         clearInterval(interval);
         window.scrollTo({
@@ -99,7 +112,6 @@ export default class Gallery extends React.Component {
       }
       this.setState({
         page: this.state.page + 1,
-        isFirstLoad: false,
       });
     });
   };
@@ -151,9 +163,6 @@ export default class Gallery extends React.Component {
             <div className="loader" ref={ el => this.loader = el }>Loading...</div>
         )}
         </div>
-        {!this.state.isScrollbarVisible && this.state.loadingState === STATUS_LOADED ? (
-            <button className="load-more-button" onClick={() => {this.fetchRandomCat(); this.loadImages()}}>Show more images</button>
-        ) : <div style={{height: 50}}></div> }
       </div>
     );
   }
