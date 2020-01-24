@@ -7,9 +7,10 @@ body {
 nav ul {
   list-style: none;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   background-color: #ffc859;
   margin: 0;
+  padding: 0;
 }
 
 nav a,
@@ -34,6 +35,9 @@ nav a:focus {
   height: auto;
 }
 
+.loader-container {
+  height: 10em;
+}
 .loader,
 .loader:after {
   border-radius: 50%;
@@ -73,5 +77,77 @@ nav a:focus {
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
+  }
+}
+
+
+/* Gallery styles */
+
+.image-container {
+  width: 300px; 
+  height: auto;
+  display: block;
+  margin: 20px auto;
+  box-shadow: 5px 5px 3px gray;
+}
+
+.image {
+  width: 100%; 
+  height: auto;
+  box-sizing: border-box;
+}
+
+.scroll-to-bottom-button-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.scroll-to-bottom-button {
+  display: block;
+  margin: 30px auto;
+  background-color: #fdc763;
+  border: 2px solid transparent;
+  padding: 15px 10px;
+  box-shadow: 3px 3px 3px gray;
+}
+
+.scroll-to-bottom-button:hover {
+  background-color: #ffaf1c;
+}
+
+.scroll-to-bottom-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 1px gray;
+}
+
+.scroll-to-bottom-button:focus {
+  outline: none;
+  border: 2px solid #ffaf1c;
+}
+
+@media screen and (min-width: 600px) {
+  .gallery {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  .gallery:after {
+    content: "";
+    flex: auto;
+  }
+
+  .image-container {
+    width: auto; 
+    height: 200px;
+    display: inline-block;
+    margin: 10px 5px ;
+  }
+
+  .image {
+    width: auto; 
+    height: 100%;
   }
 }
