@@ -27,7 +27,6 @@ export default class Gallery extends React.Component {
     if ( (window.scrollY + window.innerHeight) === document.body.offsetHeight ) {
       if (this.state.loadingState !== STATUS_FETCHING) {
         this.fetchRandomCat();
-        console.log('bottom')
       } 
     }
     if (!this.state.isScrollbarVisible && window.pageYOffset > 0) {
@@ -39,22 +38,14 @@ export default class Gallery extends React.Component {
     const startScrolling = (images = this.images, limitImages = this.state.limitImagesOnPage) => {
       if (!this.state.isScrollbarVisible) {
         this.fetchRandomCat();
-        window.scrollTo({
-          top: document.body.scrollHeight,
-          behavior: 'smooth'
-        });
-      } else {
-        window.scrollTo({
-          top: document.body.scrollHeight,
-          behavior: 'smooth'
-        });
-        console.log('interval ', images, limitImages);
-        if (this.images >= this.state.limitImagesOnPage) {
-          console.log('stop');
-          clearInterval(interval);
-        }
+      } 
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+      if (images >= limitImages) {
+        clearInterval(interval);
       }
-      
     }
     const interval = setInterval(startScrolling, 1000);
   }
@@ -81,7 +72,6 @@ export default class Gallery extends React.Component {
         imagesUrl.push([url, id, width, height]);
         this.images += 1;
       }
-      // console.log(this.images)
       for (let i=0; i < imagesUrl.length; i++) {
         const imgDiv = document.createElement("div");
         const img = document.createElement("img");
