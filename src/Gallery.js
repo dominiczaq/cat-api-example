@@ -143,7 +143,7 @@ export default class Gallery extends React.Component {
       img.setAttribute("src", `${imagesData[i][0]}`);
       img.setAttribute("alt", `cat-${imagesData[i][1]}`);
       imgDiv.appendChild(img);
-      this.galleryContainer.insertBefore(imgDiv, this.loader);
+      this.galleryContainer.appendChild(imgDiv);
     }
     this.loadedImages += this.state.displayLimit;
     this.setState({
@@ -156,12 +156,14 @@ export default class Gallery extends React.Component {
     return (
       <div className="gallery-container">
         <div className="scroll-to-bottom-button-container">
-          <button className="scroll-to-bottom-button" onClick={() => this.autosSrollToBottom()}>Automatically Scroll Gallery</button>
+          <button className="scroll-to-bottom-button" onClick={() => this.autosSrollToBottom()} title='Lazy scroll button is dedicated to my husband - CLT  :)'>Automatically Scroll Gallery</button>
         </div>
         <div className="gallery" ref={ el => this.galleryContainer = el }>
-        {this.state.loadingState !== STATUS_LOADED && (
-            <div className="loader" ref={ el => this.loader = el }>Loading...</div>
-        )}
+        </div>
+        <div className="loader-container">
+          {this.state.loadingState !== STATUS_LOADED && (
+            <div className="loader">Loading...</div>
+          )}
         </div>
       </div>
     );
