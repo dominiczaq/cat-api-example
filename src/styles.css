@@ -98,8 +98,8 @@ nav a:focus {
 }
 
 .scroll-to-bottom-button-container {
-  max-width: 1400px;
-  margin: 0 auto;
+  position: sticky;
+  top: 5px;
 }
 
 .scroll-to-bottom-button {
