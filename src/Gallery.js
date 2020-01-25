@@ -9,8 +9,7 @@ export default class Gallery extends React.Component {
       images: [],
       page: 0,
       loadLimit: 10,
-      limitImagesOnPage: 1000,
-      limitImagesOnPageAutoscroll: 110,
+      limitImagesOnPage: 1500,
       isScrollbarVisible: false,
       isMobile: false,
   };
@@ -22,9 +21,11 @@ export default class Gallery extends React.Component {
       } 
       if (window.innerHeight < document.body.offsetHeight) {
         clearInterval(interval);
+        this.setState({isScrollbarVisible: true});
       }
     }
     const interval = setInterval(loadImagesAtStart, 500);
+    this.screenWidth();
     window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', this.screenWidth);
   }
@@ -35,13 +36,10 @@ export default class Gallery extends React.Component {
   }
 
   handleScroll = () => {
-    if ( (window.scrollY + window.innerHeight) >= document.body.offsetHeight - 200 ) {
+    if ( (window.scrollY + window.innerHeight) >= document.body.offsetHeight ) {
       if (this.state.loadingState !== STATUS_FETCHING) {
         this.fetchRandomCat();
       } 
-    }
-    if (!this.state.isScrollbarVisible && window.pageYOffset > 0) {
-      this.setState({isScrollbarVisible: true});
     }
   }
 
@@ -54,32 +52,34 @@ export default class Gallery extends React.Component {
     }
   }
 
-  // autosSrollToBottom = () => {
-  //   this.setState({limitImagesOnPage: this.state.limitImagesOnPageAutoscroll})
-  //   const startScrolling = (images = this.loadedImages, limitImages = this.state.limitImagesOnPage) => {
-  //     // if scrollbar is not visible, then load more images; if is visible, then scroll to bottom, which fires loadind more images
-  //     if (!this.state.isScrollbarVisible) {
-  //       this.fetchRandomCat();
-  //       // this.loadImages();
-  //     } 
-  //     window.scrollTo({
-  //       top: document.body.offsetHeight - 400,
-  //       behavior: 'smooth'
-  //     });
-  //     // clear interval
-  //     if (images >= limitImages) {
-  //       clearInterval(interval);
-  //       window.scrollTo({
-  //         top: document.body.offsetHeight,
-  //         behavior: 'smooth'
-  //       });
-  //     }
-  //   }
-  //   const interval = setInterval(startScrolling, 1000);
-  // }
+  autoScrollToBottom = () => {
+    const date = new Date();
+    const scrollingTime = 10000;
+    const endTime = date.getTime() + scrollingTime;
+    const startScrolling = (images = this.loadedImages, limitImages = this.state.limitImagesOnPage) => {
+      // if scrollbar is not visible, then load more images; if is visible, then scroll to bottom, which fires loading more images
+      if (!this.state.isScrollbarVisible) {
+        this.fetchRandomCat();
+      } 
+      window.scrollTo({
+        top: document.body.offsetHeight,
+        behavior: 'smooth'
+      });
+      // clear interval
+      const newDate = new Date();
+      const currentTime = newDate.getTime();
+      if (currentTime >= endTime) {
+        clearInterval(interval);
+        window.scrollTo({
+          top: (this.galleryContainer.offsetTop + this.galleryContainer.getBoundingClientRect().height) - window.innerHeight,
+          behavior: 'smooth'
+        });
+      }
+    }
+    const interval = setInterval(startScrolling, 1000);
+  }
 
   fetchRandomCat = () => {
-    // console.log('one ', this.state.images)
     if (this.state.images.length > (this.state.limitImagesOnPage) ) {
       return;
     }
@@ -106,7 +106,6 @@ export default class Gallery extends React.Component {
         loadingState: STATUS_LOADED,
       });
     });
-    console.log(this.state.images.length)
   };
 
   render() {
@@ -131,9 +130,9 @@ export default class Gallery extends React.Component {
     return (
       <div className="gallery-container">
         <div className="scroll-to-bottom-button-container">
-          <button className="scroll-to-bottom-button" onClick={() => this.autosSrollToBottom()} title='Lazy scroll button is dedicated to my husband - CLT  :)'>Automatically Scroll Gallery</button>
+          <button className="scroll-to-bottom-button" onClick={() => this.autoScrollToBottom()} title='Lazy scroll button is dedicated to my husband - CLT  :)'>Automatically Scroll Gallery</button>
         </div>
-        <div className="gallery" ref={ el => this.galleryContainer = el }>
+        <div className="gallery" ref={el => this.galleryContainer = el}>
           {displayImages}
         </div>
         <div className="loader-container">
