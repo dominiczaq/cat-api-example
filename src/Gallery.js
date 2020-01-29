@@ -68,6 +68,9 @@ export default class Gallery extends React.Component {
       // clear interval
       const newDate = new Date();
       const currentTime = newDate.getTime();
+      if (this.galleryContainer === null) {
+        clearInterval(interval);
+      }
       if (currentTime >= endTime) {
         clearInterval(interval);
         window.scrollTo({
