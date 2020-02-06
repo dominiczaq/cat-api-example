@@ -52,11 +52,11 @@ export default class Gallery extends React.Component {
     }
   }
 
+  
   autoScrollToBottom = () => {
-    const date = new Date();
     const scrollingTime = 10000;
-    const endTime = date.getTime() + scrollingTime;
-    const startScrolling = (images = this.loadedImages, limitImages = this.state.limitImagesOnPage) => {
+    const endTime = Date.now() + scrollingTime;
+    const startScrolling = () => {
       // if scrollbar is not visible, then load more images; if is visible, then scroll to bottom, which fires loading more images
       if (!this.state.isScrollbarVisible) {
         this.fetchRandomCat();
@@ -66,18 +66,19 @@ export default class Gallery extends React.Component {
         behavior: 'smooth'
       });
       // clear interval
-      const newDate = new Date();
-      const currentTime = newDate.getTime();
-      if (this.galleryContainer === null) {
+      const currentTime = Date.now();
+      if (this.galleryContainer !== null) {
+        if (currentTime >= endTime) {
+          clearInterval(interval);
+          window.scrollTo({
+            top: (this.galleryContainer.offsetTop + this.galleryContainer.getBoundingClientRect().height) - window.innerHeight,
+            behavior: 'smooth'
+          });
+        }
+      } else {
         clearInterval(interval);
       }
-      if (currentTime >= endTime) {
-        clearInterval(interval);
-        window.scrollTo({
-          top: (this.galleryContainer.offsetTop + this.galleryContainer.getBoundingClientRect().height) - window.innerHeight,
-          behavior: 'smooth'
-        });
-      }
+      
     }
     const interval = setInterval(startScrolling, 1000);
   }
@@ -90,7 +91,7 @@ export default class Gallery extends React.Component {
     this.setState({
       loadingState: STATUS_FETCHING
     });
-    fetch(`https://api.thecatapi.com/v1/images/search?limit=${loadLimit}&page=${page}`, {
+    fetch(`https://api.thecatapi.com/v1/images/search?limit=${loadLimit}&page=${page}&order=ASC`, {
     headers: {
       "Content-Type": "application/json",
       "x-api-key": "4bebae0d-0ec4-4787-8e77-8602741525af"
@@ -103,11 +104,13 @@ export default class Gallery extends React.Component {
         const { url, id, width, height } = data[i];
         newImages.push([url, id, width, height]);
       }
-      this.setState({
-        page: this.state.page + 1,
-        images: [...this.state.images, ...newImages],
-        loadingState: STATUS_LOADED,
-      });
+      this.setState( prevState => {
+        return {
+          page: prevState.page + 1,
+          images: [...this.state.images, ...newImages],
+          loadingState: STATUS_LOADED,
+        }
+      })
     });
   };
 
